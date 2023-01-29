@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chat
+    username: main_server
+    password: qwertyuiop
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+security:
+  code-length: 4
+  token-length: 24
+  lifespan_in_seconds: 60
+
+async-task-url: http://localhost:8081/send
+
+server:
+  port: 8080
