@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CodeGenerator {
-
     public String generateAlphabetLetterCode(int length) {
         StringBuilder sb = new StringBuilder();
 

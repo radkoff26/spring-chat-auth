@@ -15,8 +15,8 @@ import com.radkoff26.springchatauth.domain.dto.AuthorizationResult;
 import com.radkoff26.springchatauth.domain.dto.UserCredentials;
 import com.radkoff26.springchatauth.domain.entity.User;
 import com.radkoff26.springchatauth.repositories.declaration.RedisRepository;
-import com.radkoff26.springchatauth.repositories.declaration.UserRepository;
 import com.radkoff26.springchatauth.services.declaration.AuthorizeService;
+import com.radkoff26.springchatauth.services.declaration.UserService;
 import com.radkoff26.springchatauth.utils.CodeGenerator;
 import com.radkoff26.springchatauth.utils.TokenGenerator;
 
@@ -24,7 +24,7 @@ import com.radkoff26.springchatauth.utils.TokenGenerator;
 @PropertySource("classpath:application.yml")
 public class AuthorizeServiceImpl implements AuthorizeService {
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final CodeGenerator codeGenerator;
     private final TokenGenerator tokenGenerator;
     private final RestTemplate restTemplate;
@@ -35,9 +35,9 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     @Value("${async-task-url}")
     private String sendUrl;
 
-    public AuthorizeServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, CodeGenerator codeGenerator, TokenGenerator tokenGenerator, RestTemplate restTemplate, RedisRepository<String, String> mailCodeRedisRepository, RedisRepository<Long, AuthToken> userIdAuthTokenRepository) {
+    public AuthorizeServiceImpl(PasswordEncoder passwordEncoder, UserService userService, CodeGenerator codeGenerator, TokenGenerator tokenGenerator, RestTemplate restTemplate, RedisRepository<String, String> mailCodeRedisRepository, RedisRepository<Long, AuthToken> userIdAuthTokenRepository) {
         this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.codeGenerator = codeGenerator;
         this.tokenGenerator = tokenGenerator;
         this.restTemplate = restTemplate;
@@ -47,7 +47,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Override
     public AuthorizationResult authorize(UserCredentials userCredentials) {
-        User user = userRepository.findUserByLogin(userCredentials.getLogin());
+        User user = userService.getUserByLogin(userCredentials.getLogin());
 
         if (user == null) {
             return AuthorizationResult.USER_NOT_FOUND;
