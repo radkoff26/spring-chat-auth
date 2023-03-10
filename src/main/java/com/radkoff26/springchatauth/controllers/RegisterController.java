@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.radkoff26.springchatauth.domain.entity.User;
-import com.radkoff26.springchatauth.services.declaration.RegisterUserService;
+import com.radkoff26.springchatauth.services.declaration.register.RegisterUserService;
 
 @RestController
 @RequestMapping("/register")

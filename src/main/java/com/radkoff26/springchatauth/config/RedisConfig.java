@@ -35,4 +35,13 @@ public class RedisConfig {
         redisTemplate.setValueSerializer(new GenericToStringSerializer<>(AuthToken.class));
         return redisTemplate;
     }
+
+    // This template stores userId-hash data
+    @Bean
+    @Scope(value = "singleton")
+    public RedisTemplate<Long, String> userEmailSubmissionRedisTemplate(JedisConnectionFactory factory) {
+        RedisTemplate<Long, String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(factory);
+        return redisTemplate;
+    }
 }

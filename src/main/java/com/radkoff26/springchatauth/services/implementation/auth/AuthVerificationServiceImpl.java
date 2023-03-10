@@ -1,12 +1,12 @@
-package com.radkoff26.springchatauth.services.implementation;
+package com.radkoff26.springchatauth.services.implementation.auth;
 
 import org.springframework.stereotype.Service;
 
 import com.radkoff26.springchatauth.domain.dto.AuthToken;
 import com.radkoff26.springchatauth.domain.entity.User;
 import com.radkoff26.springchatauth.repositories.declaration.RedisRepository;
-import com.radkoff26.springchatauth.services.declaration.AuthVerificationService;
-import com.radkoff26.springchatauth.services.declaration.UserService;
+import com.radkoff26.springchatauth.services.declaration.auth.AuthVerificationService;
+import com.radkoff26.springchatauth.services.declaration.user.UserService;
 import com.radkoff26.springchatauth.utils.TokenGenerator;
 
 @Service

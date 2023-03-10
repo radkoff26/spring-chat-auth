@@ -1,4 +1,4 @@
-package com.radkoff26.springchatauth.services.implementation;
+package com.radkoff26.springchatauth.services.implementation.user;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -6,8 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.radkoff26.springchatauth.domain.body.request.UserSubmissionEmailBody;
 import com.radkoff26.springchatauth.domain.entity.User;
-import com.radkoff26.springchatauth.services.declaration.UserService;
+import com.radkoff26.springchatauth.services.declaration.user.UserService;
 
 import jakarta.annotation.Nullable;
 
@@ -38,5 +39,10 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return responseEntity.getBody();
+    }
+
+    @Override
+    public void submitUserEmail(long id) {
+        restTemplate.postForObject(userUrl + "/submitEmail", new UserSubmissionEmailBody(id), void.class);
     }
 }

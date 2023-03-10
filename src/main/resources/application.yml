@@ -2,6 +2,7 @@ security:
   code-length: 4
   token-length: 24
   lifespan_in_seconds: 60
+  email-submit-code-length: 32
 
 async-task-url: http://localhost:8081/send
 get-user-url: http://localhost:8082/user

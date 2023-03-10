@@ -1,4 +1,4 @@
-package com.radkoff26.springchatauth.services.declaration;
+package com.radkoff26.springchatauth.services.declaration.register;
 
 import org.springframework.http.HttpStatusCode;
 

@@ -15,11 +15,11 @@ import com.radkoff26.springchatauth.domain.dto.AuthorizationResult;
 import com.radkoff26.springchatauth.domain.dto.UserCredentials;
 import com.radkoff26.springchatauth.domain.entity.User;
 import com.radkoff26.springchatauth.repositories.declaration.RedisRepository;
-import com.radkoff26.springchatauth.services.declaration.AuthVerificationService;
-import com.radkoff26.springchatauth.services.declaration.AuthorizationAccessService;
-import com.radkoff26.springchatauth.services.declaration.AuthorizeService;
-import com.radkoff26.springchatauth.services.declaration.RefreshTokenService;
-import com.radkoff26.springchatauth.services.declaration.UserService;
+import com.radkoff26.springchatauth.services.declaration.auth.AuthVerificationService;
+import com.radkoff26.springchatauth.services.declaration.auth.AuthorizationAccessService;
+import com.radkoff26.springchatauth.services.declaration.auth.AuthorizeService;
+import com.radkoff26.springchatauth.services.declaration.auth.RefreshTokenService;
+import com.radkoff26.springchatauth.services.declaration.user.UserService;
 
 @RestController
 @RequestMapping("/auth")
@@ -61,6 +61,9 @@ public class AuthController {
                 User user = userService.getUserByLogin(userCredentials.getLogin());
                 return ResponseEntity.accepted().body(user.getId());
             }
+            case AUTHORIZATION_INTERNAL_ERROR -> {
+                return ResponseEntity.internalServerError().build();
+            }
         }
         return ResponseEntity.badRequest().build();
     }
@@ -77,7 +80,7 @@ public class AuthController {
     @GetMapping(path = "/access")
     public ResponseEntity<String> access(@RequestParam("user_id") long userId, @RequestParam("access_token") String token) {
         boolean hasAccess = authorizationAccessService.hasAccess(userId, token);
-        return hasAccess ? ResponseEntity.ok().build() : ResponseEntity.status(403).build();
+        return hasAccess ? ResponseEntity.ok("OK! - 200") : ResponseEntity.status(403).body("Forbidden - 403");
     }
 
     @GetMapping(path = "/refresh")

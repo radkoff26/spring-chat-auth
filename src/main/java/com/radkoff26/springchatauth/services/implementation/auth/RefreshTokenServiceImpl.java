@@ -1,10 +1,10 @@
-package com.radkoff26.springchatauth.services.implementation;
+package com.radkoff26.springchatauth.services.implementation.auth;
 
 import org.springframework.stereotype.Service;
 
 import com.radkoff26.springchatauth.domain.dto.AuthToken;
 import com.radkoff26.springchatauth.repositories.declaration.RedisRepository;
-import com.radkoff26.springchatauth.services.declaration.RefreshTokenService;
+import com.radkoff26.springchatauth.services.declaration.auth.RefreshTokenService;
 import com.radkoff26.springchatauth.utils.TokenGenerator;
 
 @Service

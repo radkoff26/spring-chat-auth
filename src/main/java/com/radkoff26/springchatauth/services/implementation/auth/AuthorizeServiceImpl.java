@@ -1,22 +1,23 @@
-package com.radkoff26.springchatauth.services.implementation;
+package com.radkoff26.springchatauth.services.implementation.auth;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import com.radkoff26.springchatauth.domain.body.SendEmailCodeRequestBody;
+import com.radkoff26.springchatauth.domain.body.response.AsyncTaskCode;
 import com.radkoff26.springchatauth.domain.dto.AuthToken;
 import com.radkoff26.springchatauth.domain.dto.AuthorizationResult;
 import com.radkoff26.springchatauth.domain.dto.UserCredentials;
 import com.radkoff26.springchatauth.domain.entity.User;
 import com.radkoff26.springchatauth.repositories.declaration.RedisRepository;
-import com.radkoff26.springchatauth.services.declaration.AuthorizeService;
-import com.radkoff26.springchatauth.services.declaration.UserService;
+import com.radkoff26.springchatauth.services.declaration.auth.AuthorizeService;
+import com.radkoff26.springchatauth.services.declaration.send.SendAsyncTaskService;
+import com.radkoff26.springchatauth.services.declaration.user.UserService;
 import com.radkoff26.springchatauth.utils.CodeGenerator;
 import com.radkoff26.springchatauth.utils.TokenGenerator;
 
@@ -27,20 +28,18 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     private final UserService userService;
     private final CodeGenerator codeGenerator;
     private final TokenGenerator tokenGenerator;
-    private final RestTemplate restTemplate;
+    private final SendAsyncTaskService sendAsyncTaskService;
     private final RedisRepository<String, String> mailCodeRedisRepository;
     private final RedisRepository<Long, AuthToken> userIdAuthTokenRepository;
     @Value("${security.code-length}")
     private int codeLength;
-    @Value("${async-task-url}")
-    private String sendUrl;
 
-    public AuthorizeServiceImpl(PasswordEncoder passwordEncoder, UserService userService, CodeGenerator codeGenerator, TokenGenerator tokenGenerator, RestTemplate restTemplate, RedisRepository<String, String> mailCodeRedisRepository, RedisRepository<Long, AuthToken> userIdAuthTokenRepository) {
+    public AuthorizeServiceImpl(PasswordEncoder passwordEncoder, UserService userService, CodeGenerator codeGenerator, TokenGenerator tokenGenerator, SendAsyncTaskService sendAsyncTaskService, RedisRepository<String, String> mailCodeRedisRepository, RedisRepository<Long, AuthToken> userIdAuthTokenRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.codeGenerator = codeGenerator;
         this.tokenGenerator = tokenGenerator;
-        this.restTemplate = restTemplate;
+        this.sendAsyncTaskService = sendAsyncTaskService;
         this.mailCodeRedisRepository = mailCodeRedisRepository;
         this.userIdAuthTokenRepository = userIdAuthTokenRepository;
     }
@@ -67,9 +66,10 @@ public class AuthorizeServiceImpl implements AuthorizeService {
             map.put("email", user.getEmail());
             map.put("code", code);
 
-            SendEmailCodeRequestBody body = new SendEmailCodeRequestBody("SEND_EMAIL_CODE", map);
-
-            restTemplate.postForEntity(sendUrl, body, void.class);
+            ResponseEntity<Void> response = sendAsyncTaskService.sendAsyncTask(AsyncTaskCode.SEND_EMAIL_CODE, map);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                return AuthorizationResult.AUTHORIZATION_INTERNAL_ERROR;
+            }
             mailCodeRedisRepository.add(user.getEmail(), code);
 
             return AuthorizationResult.NEEDS_SECOND_FACTOR_SUBMISSION;

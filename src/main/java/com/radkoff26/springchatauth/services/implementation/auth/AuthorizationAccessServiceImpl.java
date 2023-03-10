@@ -1,4 +1,4 @@
-package com.radkoff26.springchatauth.services.implementation;
+package com.radkoff26.springchatauth.services.implementation.auth;
 
 import java.sql.Timestamp;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.radkoff26.springchatauth.domain.dto.AuthToken;
 import com.radkoff26.springchatauth.repositories.declaration.RedisRepository;
-import com.radkoff26.springchatauth.services.declaration.AuthorizationAccessService;
+import com.radkoff26.springchatauth.services.declaration.auth.AuthorizationAccessService;
 
 @Service
 public class AuthorizationAccessServiceImpl implements AuthorizationAccessService {

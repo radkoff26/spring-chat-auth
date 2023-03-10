@@ -1,4 +1,4 @@
-package com.radkoff26.springchatauth.services.implementation;
+package com.radkoff26.springchatauth.services.implementation.register;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.radkoff26.springchatauth.domain.entity.User;
-import com.radkoff26.springchatauth.services.declaration.RegisterUserService;
+import com.radkoff26.springchatauth.services.declaration.register.RegisterUserService;
 
 @Service
 public class RegisterUserServiceImpl implements RegisterUserService {
